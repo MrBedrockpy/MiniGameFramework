@@ -1,0 +1,4 @@
+name: MinigameFramework
+version: '${version}'
+main: ru.mrbedrockpy.minigameframework.MiniGameCore
+api-version: '1.18'
