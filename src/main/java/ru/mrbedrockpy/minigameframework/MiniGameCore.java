@@ -24,8 +24,8 @@ public final class MiniGameCore extends JavaPlugin {
 
         multiverseCore = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
 
-        miniGameManager = new MiniGameManager();
-        lobbyManager = new LobbyManager();
+        miniGameManager = new MiniGameManager(this);
+        lobbyManager = new LobbyManager(this);
     }
 
     private void setupStorage() {
@@ -35,6 +35,7 @@ public final class MiniGameCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        this.miniGameManager.cancel();
         this.multiverseCore = null;
         instance = null;
     }

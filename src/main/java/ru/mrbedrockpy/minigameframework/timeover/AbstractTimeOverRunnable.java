@@ -6,11 +6,14 @@ import ru.mrbedrockpy.minigameframework.MiniGameCore;
 
 public abstract class AbstractTimeOverRunnable extends BukkitRunnable {
 
+    private final MiniGameCore core;
+
     protected final AbstractMiniGame miniGame;
 
     protected int timeOver = getStartTime();
 
-    public AbstractTimeOverRunnable(AbstractMiniGame miniGame) {
+    public AbstractTimeOverRunnable(MiniGameCore core, AbstractMiniGame miniGame) {
+        this.core = core;
         this.miniGame = miniGame;
     }
 
@@ -18,14 +21,14 @@ public abstract class AbstractTimeOverRunnable extends BukkitRunnable {
     public final void run() {
         if (timeOver <= 0) {
             cancel();
-            MiniGameCore.getInstance().getMiniGameManager().addMiniGame(miniGame);
+            core.getMiniGameManager().addMiniGame(miniGame);
         }
         timeOver--;
         tick();
     }
 
     public void start() {
-        this.runTaskTimer(MiniGameCore.getInstance(), 0L, 20L);
+        this.runTaskTimer(core, 0L, 20L);
     }
 
     public abstract void tick();

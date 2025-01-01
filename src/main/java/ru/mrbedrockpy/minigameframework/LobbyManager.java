@@ -13,12 +13,15 @@ import java.util.List;
 
 public final class LobbyManager implements Listener {
 
+    private final MiniGameCore core;
+
     private final List<AbstractMiniGame> queue = new ArrayList<>();
 
     private final TimeOverManager timeOverManager = new TimeOverManager();
 
-    public LobbyManager() {
-        MiniGameCore.getInstance().getServer().getPluginManager().registerEvents(this, MiniGameCore.getInstance());
+    public LobbyManager(MiniGameCore core) {
+        this.core = core;
+        core.getServer().getPluginManager().registerEvents(this, core);
     }
 
     public boolean addPlayerInQueue(Class<? extends AbstractMiniGame> miniGameClass, Player player) {
@@ -30,7 +33,7 @@ public final class LobbyManager implements Listener {
         }
         if (miniGame.getMaxPlayers() >= miniGame.getPlayers().size()) {
             timeOverManager.stopTimeOverAfterGame(miniGame);
-            MiniGameCore.getInstance().getMiniGameManager().addMiniGame(miniGame);
+            core.getMiniGameManager().addMiniGame(miniGame);
             return false;
         }
         miniGame.addPlayer(player);
@@ -42,15 +45,15 @@ public final class LobbyManager implements Listener {
     private AbstractMiniGame createMiniGame(Class<? extends AbstractMiniGame> miniGame) {
         try {
             Constructor<? extends AbstractMiniGame> constructor = miniGame.getDeclaredConstructor(String.class);
-            return constructor.newInstance();
+            return constructor.newInstance(core);
         } catch (NoSuchMethodException e) {
-            MiniGameCore.getInstance().getLogger().warning("MiniGame class " + miniGame.getName() + " does not have a constructor");
+            core.getLogger().warning("MiniGame class " + miniGame.getName() + " does not have a constructor");
         } catch (InvocationTargetException e) {
-            MiniGameCore.getInstance().getLogger().warning("MiniGame class " + miniGame.getName() + " threw an exception while executing constructor");
+            core.getLogger().warning("MiniGame class " + miniGame.getName() + " threw an exception while executing constructor");
         } catch (InstantiationException e) {
-            MiniGameCore.getInstance().getLogger().warning("MiniGame class " + miniGame.getName() + " threw an exception while instantiating constructor");
+            core.getLogger().warning("MiniGame class " + miniGame.getName() + " threw an exception while instantiating constructor");
         } catch (IllegalAccessException e) {
-            MiniGameCore.getInstance().getLogger().warning("MiniGame class " + miniGame.getName() + " threw an exception while accessing constructor");
+            core.getLogger().warning("MiniGame class " + miniGame.getName() + " threw an exception while accessing constructor");
         }
         return null;
     }

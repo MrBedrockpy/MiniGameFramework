@@ -10,9 +10,15 @@ import java.util.List;
 
 public abstract class AbstractMiniGame {
 
+    private final MiniGameCore core;
+
     protected long tick = 0;
 
     private final List<Player> players = new ArrayList<>();
+
+    public AbstractMiniGame(MiniGameCore core) {
+        this.core = core;
+    }
 
     public abstract MultiverseWorld getWorld();
 
@@ -20,7 +26,7 @@ public abstract class AbstractMiniGame {
     public abstract int getMaxPlayers();
 
     public AbstractTimeOverRunnable getTimeOverRunnable() {
-        return new DefaultTimeOverRunnable(this);
+        return new DefaultTimeOverRunnable(core, this);
     }
 
     public void tick() {}

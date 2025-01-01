@@ -11,12 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class MiniGameManager extends BukkitRunnable implements Listener {
-    
+
+    private final MiniGameCore core;
+
     private final List<AbstractMiniGame> sessions = new ArrayList<>();
 
-    public MiniGameManager() {
-        MiniGameCore.getInstance().getServer().getPluginManager().registerEvents(this, MiniGameCore.getInstance());
-        this.runTaskTimer(MiniGameCore.getInstance(), 0L, 1L);
+    public MiniGameManager(MiniGameCore core) {
+        this.core = core;
+        core.getServer().getPluginManager().registerEvents(this, core);
+        this.runTaskTimer(core, 0L, 1L);
     }
 
     public void addMiniGame(AbstractMiniGame game) {
